@@ -29,7 +29,7 @@ const Pressable = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof RNPressable>,
     React.ComponentRef<typeof RNPressable>
   >(isTextChildren(children) ? <></> : children, {
-    ...mergeProps(pressableSlotProps, children.props),
+    ...mergeProps(pressableSlotProps, (children as any).props),
     ref: forwardedRef
       ? composeRefs(forwardedRef, (children as any).ref)
       : (children as any).ref,
@@ -51,7 +51,7 @@ const View = React.forwardRef<React.ComponentRef<typeof RNView>, RNViewProps>(
       React.ComponentPropsWithoutRef<typeof RNView>,
       React.ComponentRef<typeof RNView>
     >(isTextChildren(children) ? <></> : children, {
-      ...mergeProps(viewSlotProps, children.props),
+      ...mergeProps(viewSlotProps, (children as any).props),
       ref: forwardedRef
         ? composeRefs(forwardedRef, (children as any).ref)
         : (children as any).ref,
@@ -74,7 +74,7 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, RNTextProps>(
       React.ComponentPropsWithoutRef<typeof RNText>,
       React.ComponentRef<typeof RNText>
     >(isTextChildren(children) ? <></> : children, {
-      ...mergeProps(textSlotProps, children.props),
+      ...mergeProps(textSlotProps, (children as any).props),
       ref: forwardedRef
         ? composeRefs(forwardedRef, (children as any).ref)
         : (children as any).ref,
@@ -103,7 +103,7 @@ const Image = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof RNImage>,
     React.ComponentRef<typeof RNImage>
   >(isTextChildren(children) ? <></> : children, {
-    ...mergeProps(imageSlotProps, children.props),
+    ...mergeProps(imageSlotProps, (children as any).props),
     ref: forwardedRef
       ? composeRefs(forwardedRef, (children as any).ref)
       : (children as any).ref,

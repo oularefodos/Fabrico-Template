@@ -39,7 +39,6 @@ const Combobox = React.forwardRef<
   (
     {
       className,
-      textClass,
       variant = "outline",
       size = "sm",
       inputProps,
@@ -199,7 +198,7 @@ const Combobox = React.forwardRef<
               paddingBottom: insets.bottom + HEADER_HEIGHT,
             }}
             renderItem={renderItem}
-            keyExtractor={(item, index) =>
+            keyExtractor={(item: unknown, index: number) =>
               (item as ComboboxOption)?.value ?? index.toString()
             }
             className={"px-4"}

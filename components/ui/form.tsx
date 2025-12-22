@@ -481,8 +481,6 @@ const FormSelect = React.forwardRef<
             : `${ formDescriptionNativeID } ${ formMessageNativeID }`
         }
         aria-invalid={!!error}
-        open={open}
-        onOpenChange={setOpen}
         value={
           value
             ? {label: value?.label ?? "", value: value?.value ?? ""}
