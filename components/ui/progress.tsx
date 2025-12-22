@@ -11,7 +11,7 @@ import {cn} from "@/lib/utils";
 import * as ProgressPrimitive from "../primitives/progress";
 
 const Progress = React.forwardRef<
-  React.ElementRef<typeof ProgressPrimitive.Root>,
+  React.ComponentRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & {
     indicatorClassName?: string;
   }

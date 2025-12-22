@@ -3,9 +3,9 @@ import type { Pressable, Text, View, ViewStyle } from "react-native";
 type ComponentPropsWithAsChild<T extends React.ElementType<any>> =
   React.ComponentPropsWithoutRef<T> & { asChild?: boolean };
 
-type ViewRef = React.ElementRef<typeof View>;
-type PressableRef = React.ElementRef<typeof Pressable>;
-type TextRef = React.ElementRef<typeof Text>;
+type ViewRef = React.ComponentRef<typeof View>;
+type PressableRef = React.ComponentRef<typeof Pressable>;
+type TextRef = React.ComponentRef<typeof Text>;
 
 type SlottableViewProps = ComponentPropsWithAsChild<typeof View>;
 type SlottablePressableProps = ComponentPropsWithAsChild<typeof Pressable> & {

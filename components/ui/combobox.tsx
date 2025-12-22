@@ -25,7 +25,7 @@ interface ComboboxOption {
 }
 
 const Combobox = React.forwardRef<
-  React.ElementRef<typeof Button>,
+  React.ComponentRef<typeof Button>,
   Omit<React.ComponentPropsWithoutRef<typeof Button>, "children"> & {
     items: ComboboxOption[];
     placeholder?: string;

@@ -3,7 +3,7 @@ import * as LabelPrimitive from "@/components/primitives/label";
 import {cn} from "@/lib/utils";
 
 const Label = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Text>,
+  React.ComponentRef<typeof LabelPrimitive.Text>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Text>
 >(
   (
