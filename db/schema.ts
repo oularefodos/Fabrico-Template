@@ -1,25 +1,52 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
-import { createSelectSchema } from "drizzle-zod";
+import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 import type { z } from "zod";
 
-export const habitTable = sqliteTable("habits", {
+/**
+ * User table - stores user information
+ * Works in both local (SQLite) and cloud (Supabase) modes
+ */
+export const userTable = sqliteTable("users", {
   id: text("id")
     .$defaultFn(() => createId())
+    .primaryKey()
     .notNull(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
-  category: text("category").notNull(),
-  duration: integer("duration").notNull(),
-  archived: integer("archived", {
-    mode: "boolean",
-  }).default(false),
-  enableNotifications: integer("enable_notifications", {
-    mode: "boolean",
-  }).default(false),
+  email: text("email").unique(),
+  name: text("name"),
+  avatarUrl: text("avatar_url"),
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+  // Sync metadata for dual-mode architecture
+  syncStatus: text("sync_status", {
+    enum: ["local", "synced", "pending", "error"]
+  }).default("local"),
+  lastSyncedAt: text("last_synced_at"),
 });
 
-export const HabitSchema = createSelectSchema(habitTable);
-export type Habit = z.infer<typeof HabitSchema>;
+/**
+ * Database configuration table - stores app settings
+ * Used to manage database mode and Supabase credentials
+ */
+export const dbConfigTable = sqliteTable("db_config", {
+  key: text("key").primaryKey().notNull(),
+  value: text("value").notNull(),
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+// Type exports
+export const UserSchema = createSelectSchema(userTable);
+export const InsertUserSchema = createInsertSchema(userTable);
+export type User = z.infer<typeof UserSchema>;
+export type InsertUser = z.infer<typeof InsertUserSchema>;
+
+// Config keys enum for type safety
+export const DB_CONFIG_KEYS = {
+  MODE: "db_mode", // "local" | "supabase"
+  SUPABASE_URL: "supabase_url",
+  SUPABASE_ANON_KEY: "supabase_anon_key",
+  USER_ID: "current_user_id",
+} as const;
+
+export type DbMode = "local" | "supabase";

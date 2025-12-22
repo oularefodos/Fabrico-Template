@@ -1,61 +1,71 @@
 import * as React from 'react';
-import {Linking, Platform} from 'react-native';
-import List, {ListHeader} from "@/components/ui/list";
-import ListItem from "@/components/ui/list-item";
-import {Muted} from "@/components/ui/typography";
-import {ScrollView} from 'react-native-gesture-handler';
-import {Archive, Bell, BookOpen, Send, Shield, Star} from '@/lib/icons';
-import * as WebBrowser from "expo-web-browser";
-
-import {ThemeSettingItem} from '@/components/settings/ThemeItem';
-import {NotificationItem} from '@/components/settings/NotificationItem';
+import { View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Stack } from 'expo-router';
+import { ConnectionCard } from '@/components/database/ConnectionCard';
+import { ThemeSettingItem } from '@/components/settings/ThemeItem';
+import List, { ListHeader } from "@/components/ui/list";
+import { Muted } from "@/components/ui/typography";
+import { Text } from "@/components/ui/text";
 
 export default function Settings() {
-  const openExternalURL = (url: string) => {
-    if (Platform.OS === "web") {
-      Linking.openURL(url);
-    } else {
-      WebBrowser.openBrowserAsync(url);
-    }
+  const [dbMode, setDbMode] = React.useState<"local" | "supabase">("local");
+
+  const handleConnect = () => {
+    // TODO: Implement Supabase connection flow
+    console.log("Connect to Supabase");
+    // For now, just toggle the mode for UI demonstration
+    setDbMode("supabase");
   };
+
+  const handleDisconnect = () => {
+    // TODO: Implement disconnect logic
+    console.log("Disconnect from Supabase");
+    setDbMode("local");
+  };
+
   return (
-    <ScrollView className="flex-1 w-full px-6 bg-background pt-4 gap-y-6">
+    <ScrollView className="flex-1 w-full bg-background">
+      <Stack.Screen
+        options={{
+          title: "Settings",
+        }}
+      />
 
-      <List>
-        <ListHeader>
-          <Muted>App</Muted>
-        </ListHeader>
-        <ThemeSettingItem />
-        {
-          Platform.OS !== "web" && <NotificationItem />
-        }
-        <ListHeader className='pt-8'>
-          <Muted>GENERAL</Muted>
-        </ListHeader>
-        <ListItem
-          itemLeft={(props) => <Star {...props} />} // props adds size and color attributes
-          label="Give us a start"
-          onPress={() => openExternalURL("https://github.com/expo-starter/expo-template")}
-        />
-        <ListItem
-          itemLeft={(props) => <Send {...props} />} // props adds size and color attributes
-          label="Send Feedback"
-          onPress={() => openExternalURL("https://expostarter.com")}
+      <View className="px-6 pt-4 gap-6 pb-8">
+        {/* Database Section */}
+        <View className="gap-3">
+          <Muted className="text-xs uppercase">Database</Muted>
+          <ConnectionCard
+            mode={dbMode}
+            onConnect={handleConnect}
+            onDisconnect={handleDisconnect}
+          />
+        </View>
 
+        {/* App Settings */}
+        <List>
+          <ListHeader>
+            <Muted>Appearance</Muted>
+          </ListHeader>
+          <ThemeSettingItem />
+        </List>
 
-        />
-        <ListItem
-          itemLeft={(props) => <Shield {...props} />} // props adds size and color attributes
-          label="Privacy Policy"
-
-          onPress={() => openExternalURL("https://expostarter.com")}
-        />
-        <ListItem
-          itemLeft={(props) => <BookOpen {...props} />} // props adds size and color attributes
-          label="Terms of service"
-          onPress={() => openExternalURL("https://expostarter.com")}
-        />
-      </List>
+        {/* Info Section */}
+        <View className="gap-3 pt-4">
+          <Muted className="text-xs uppercase">About</Muted>
+          <View className="bg-secondary/30 p-4 rounded-lg gap-2">
+            <Text className="text-sm font-medium">Fabrico Template</Text>
+            <Text className="text-xs text-muted-foreground">
+              Version 1.0.0
+            </Text>
+            <Text className="text-xs text-muted-foreground leading-5">
+              A vibe-coding agent template with dual-mode database architecture.
+              Start with local SQLite and optionally connect to Supabase for cloud sync.
+            </Text>
+          </View>
+        </View>
+      </View>
     </ScrollView>
   );
 }
