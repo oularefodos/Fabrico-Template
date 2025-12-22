@@ -40,7 +40,7 @@ const List: React.FC<ListProps> = ({children, className, ...props}) => {
 		}
 
 		return React.cloneElement<any>(child, {
-			className: cn(child.props.className, injectClassName),
+			className: cn((child as any).props.className, injectClassName),
 		});
 	});
 
