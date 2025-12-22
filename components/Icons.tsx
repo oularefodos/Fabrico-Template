@@ -122,6 +122,7 @@ interopIcon(Terminal);
 interopIcon(AlertTriangle);
 interopIcon(Code);
 interopIcon(CheckSquare);
+interopIcon(Github);
 
 export {
   Activity,
@@ -156,6 +157,7 @@ export {
   Ear,
   Fan,
   GalleryHorizontal,
+  Github,
   Info,
   Italic,
   Lamp,
