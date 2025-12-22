@@ -1,5 +1,4 @@
 import { Sparkles } from '@/components/Icons';
-import { Settings } from '@/lib/icons/Settings';
 import { Tabs } from 'expo-router';
 
 export const unstable_settings = {
@@ -8,19 +7,13 @@ export const unstable_settings = {
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs screenOptions={{ tabBarStyle: { display: 'none' } }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Fabrico',
+          headerShown: false,
           tabBarIcon: () => <Sparkles className="text-foreground" />,
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: () => <Settings className="text-foreground" />,
         }}
       />
     </Tabs>

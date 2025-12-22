@@ -48,7 +48,7 @@ function useRootContext() {
 }
 
 const Image = React.forwardRef<
-  React.ElementRef<typeof RNImage>,
+  React.ComponentRef<typeof RNImage>,
   Omit<ComponentPropsWithAsChild<typeof RNImage>, "alt"> & AvatarImageProps
 >(
   (

@@ -31,7 +31,7 @@ import {Button} from "./button";
 // TODO: refactor and move to UI
 // TODO: create web component, use https://ui.shadcn.com/docs/components/drawer
 
-type BottomSheetRef = React.ElementRef<typeof View>;
+type BottomSheetRef = React.ComponentRef<typeof View>;
 type BottomSheetProps = React.ComponentPropsWithoutRef<typeof View>;
 
 interface BottomSheetContext {
@@ -64,7 +64,7 @@ function useBottomSheetContext() {
 
 const CLOSED_INDEX = -1;
 
-type BottomSheetContentRef = React.ElementRef<typeof BottomSheetModal>;
+type BottomSheetContentRef = React.ComponentRef<typeof BottomSheetModal>;
 
 type BottomSheetContentProps = Omit<
   React.ComponentPropsWithoutRef<typeof BottomSheetModal>,
@@ -159,7 +159,7 @@ const BottomSheetContent = React.forwardRef<
 );
 
 const BottomSheetOpenTrigger = React.forwardRef<
-  React.ElementRef<typeof Pressable>,
+  React.ComponentRef<typeof Pressable>,
   React.ComponentPropsWithoutRef<typeof Pressable> & {
     asChild?: boolean;
   }
@@ -174,7 +174,7 @@ const BottomSheetOpenTrigger = React.forwardRef<
 });
 
 const BottomSheetCloseTrigger = React.forwardRef<
-  React.ElementRef<typeof Pressable>,
+  React.ComponentRef<typeof Pressable>,
   React.ComponentPropsWithoutRef<typeof Pressable> & {
     asChild?: boolean;
   }
@@ -226,7 +226,7 @@ function BottomSheetView({
   );
 }
 
-type BottomSheetTextInputRef = React.ElementRef<typeof GBottomSheetTextInput>;
+type BottomSheetTextInputRef = React.ComponentRef<typeof GBottomSheetTextInput>;
 type BottomSheetTextInputProps = React.ComponentPropsWithoutRef<
   typeof GBottomSheetTextInput
 >;
@@ -247,7 +247,7 @@ const BottomSheetTextInput = React.forwardRef<
   );
 });
 
-type BottomSheetFlatListRef = React.ElementRef<typeof GBottomSheetFlatList>;
+type BottomSheetFlatListRef = React.ComponentRef<typeof GBottomSheetFlatList>;
 type BottomSheetFlatListProps = React.ComponentPropsWithoutRef<
   typeof GBottomSheetFlatList
 >;
@@ -267,7 +267,7 @@ const BottomSheetFlatList = React.forwardRef<
   );
 });
 
-type BottomSheetHeaderRef = React.ElementRef<typeof View>;
+type BottomSheetHeaderRef = React.ComponentRef<typeof View>;
 type BottomSheetHeaderProps = React.ComponentPropsWithoutRef<typeof View>;
 const BottomSheetHeader = React.forwardRef<
   BottomSheetHeaderRef,
@@ -297,7 +297,7 @@ const BottomSheetHeader = React.forwardRef<
   );
 });
 
-type BottomSheetFooterRef = React.ElementRef<typeof View>;
+type BottomSheetFooterRef = React.ComponentRef<typeof View>;
 type BottomSheetFooterProps = Omit<
   React.ComponentPropsWithoutRef<typeof View>,
   "style"

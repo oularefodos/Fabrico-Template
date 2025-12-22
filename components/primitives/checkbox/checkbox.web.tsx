@@ -92,7 +92,7 @@ function useCheckboxContext() {
 }
 
 const Indicator = React.forwardRef<
-  React.ElementRef<typeof View>,
+  React.ComponentRef<typeof View>,
   ComponentPropsWithAsChild<typeof View> & CheckboxIndicator
 >(({asChild, forceMount, ...props}, ref) => {
   const {checked, disabled} = useCheckboxContext();

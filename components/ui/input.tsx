@@ -4,7 +4,7 @@ import {TextInput} from "react-native";
 import {cn} from "@/lib/utils";
 
 const Input = React.forwardRef<
-  React.ElementRef<typeof TextInput>,
+  React.ComponentRef<typeof TextInput>,
   React.ComponentPropsWithoutRef<typeof TextInput>
 >(({className, placeholderClassName, ...props}, ref) => {
   return (

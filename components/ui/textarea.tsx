@@ -3,7 +3,7 @@ import {TextInput} from "react-native";
 import {cn} from "@/lib/utils";
 
 const Textarea = React.forwardRef<
-  React.ElementRef<typeof TextInput>,
+  React.ComponentRef<typeof TextInput>,
   React.ComponentPropsWithoutRef<typeof TextInput>
 >(
   (
