@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 import type { z } from "zod";
@@ -35,11 +35,40 @@ export const dbConfigTable = sqliteTable("db_config", {
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
 });
 
+/**
+ * Todo table - stores todo items
+ * Supports local-first with cloud sync capability
+ */
+export const todoTable = sqliteTable("todos", {
+  id: text("id")
+    .$defaultFn(() => createId())
+    .primaryKey()
+    .notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  completed: integer("completed", { mode: "boolean" }).default(false).notNull(),
+  priority: text("priority", {
+    enum: ["low", "medium", "high"]
+  }).default("medium"),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+  // Sync metadata for dual-mode architecture
+  syncStatus: text("sync_status", {
+    enum: ["local", "synced", "pending", "error"]
+  }).default("local"),
+  lastSyncedAt: text("last_synced_at"),
+});
+
 // Type exports
 export const UserSchema = createSelectSchema(userTable);
 export const InsertUserSchema = createInsertSchema(userTable);
 export type User = z.infer<typeof UserSchema>;
 export type InsertUser = z.infer<typeof InsertUserSchema>;
+
+export const TodoSchema = createSelectSchema(todoTable);
+export const InsertTodoSchema = createInsertSchema(todoTable);
+export type Todo = z.infer<typeof TodoSchema>;
+export type InsertTodo = z.infer<typeof InsertTodoSchema>;
 
 // Config keys enum for type safety
 export const DB_CONFIG_KEYS = {

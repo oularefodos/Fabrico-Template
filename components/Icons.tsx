@@ -16,6 +16,7 @@ import {
   Calendar,
   CalendarDays,
   Check,
+  CheckCircle2,
   Settings,
   CheckSquare,
   ChevronDown,
@@ -24,6 +25,7 @@ import {
   ChevronUp,
   ChevronsDownUp,
   ChevronsUpDown,
+  Circle,
   CircleUserRound,
   Cloud,
   Code,
@@ -51,6 +53,7 @@ import {
   Sun,
   Table,
   Terminal,
+  Trash2,
   Underline,
   UserPlus,
   Users,
@@ -122,6 +125,9 @@ interopIcon(Terminal);
 interopIcon(AlertTriangle);
 interopIcon(Code);
 interopIcon(CheckSquare);
+interopIcon(CheckCircle2);
+interopIcon(Circle);
+interopIcon(Trash2);
 interopIcon(Github);
 
 export {
@@ -142,6 +148,7 @@ export {
   Calendar,
   CalendarDays,
   Check,
+  CheckCircle2,
   CheckSquare,
   ChevronDown,
   ChevronLeft,
@@ -149,6 +156,7 @@ export {
   ChevronUp,
   ChevronsDownUp,
   ChevronsUpDown,
+  Circle,
   CircleUserRound,
   Cloud,
   Code,
@@ -176,6 +184,7 @@ export {
   Sun,
   Table,
   Terminal,
+  Trash2,
   Underline,
   UserPlus,
   Users,
