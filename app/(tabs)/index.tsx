@@ -6,7 +6,7 @@ import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useMigrationHelper } from "@/db/drizzle";
+import { useMigrationHelper } from "@/db/hooks";
 import { useDatabase } from "@/db/provider";
 import { todoTable, type Todo } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";

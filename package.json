@@ -19,6 +19,7 @@
     "@expo-google-fonts/inter": "^0.4.0",
     "@gorhom/bottom-sheet": "^5.1.6",
     "@hookform/resolvers": "^3.10.0",
+    "@libsql/client": "^0.15.15",
     "@paralleldrive/cuid2": "^2.2.2",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
@@ -70,7 +71,6 @@
     "react-native-svg": "15.12.1",
     "react-native-web": "^0.21.0",
     "react-native-worklets": "0.5.1",
-    "sql.js": "^1.13.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1",
@@ -80,7 +80,6 @@
     "@babel/core": "^7.26.0",
     "@babel/runtime": "^7.26.0",
     "@types/react": "~19.1.10",
-    "@types/sql.js": "^1.4.9",
     "drizzle-kit": "^0.31.1",
     "tailwindcss": "3.4.1",
     "typescript": "~5.9.3"

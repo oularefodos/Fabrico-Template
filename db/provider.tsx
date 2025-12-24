@@ -1,28 +1,43 @@
-import type {ExpoSQLiteDatabase} from "drizzle-orm/expo-sqlite";
-import type {SQLJsDatabase} from "drizzle-orm/sql-js";
-import React, {type PropsWithChildren, useContext, useEffect, useState} from "react";
-import {initialize} from "./drizzle";
+import type { LibSQLDatabase } from "drizzle-orm/libsql";
+import React, { type PropsWithChildren, useContext, useEffect, useState } from "react";
+import { db, runMigrations } from "./client";
+import * as schema from "./schema";
 
-type ContextType = {db: SQLJsDatabase | ExpoSQLiteDatabase | null}
+type ContextType = {
+  db: LibSQLDatabase<typeof schema> | null;
+  isReady: boolean;
+  error: Error | null;
+};
 
-export const DatabaseContext = React.createContext<ContextType>({db: null});
+export const DatabaseContext = React.createContext<ContextType>({
+  db: null,
+  isReady: false,
+  error: null,
+});
 
 export const useDatabase = () => useContext(DatabaseContext);
 
-
-export function DatabaseProvider({children}: PropsWithChildren) {
-  const [db, setDb] = useState<SQLJsDatabase | ExpoSQLiteDatabase | null>(null);
+export function DatabaseProvider({ children }: PropsWithChildren) {
+  const [isReady, setIsReady] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (db) return
-    initialize().then((newDb) => {
-      setDb(newDb);
-    })
-
+    // Run migrations on startup
+    runMigrations()
+      .then((result) => {
+        if (result.success) {
+          setIsReady(true);
+        } else {
+          setError(result.error || new Error("Migration failed"));
+        }
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }, []);
 
   return (
-    <DatabaseContext.Provider value={{db}}>
+    <DatabaseContext.Provider value={{ db, isReady, error }}>
       {children}
     </DatabaseContext.Provider>
   );
