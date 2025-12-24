@@ -1,21 +1,31 @@
-# Database Setup with libSQL
+# Database Setup with expo-sqlite
 
-This project uses **libSQL** for a unified, offline-first database across all platforms (iOS, Android, Web).
+This project uses **expo-sqlite** for a unified, offline-first database across all platforms (iOS, Android, Web).
 
 ## Architecture
 
-- **Single Database Client**: libSQL works on all platforms without platform-specific code
+- **Single Database Client**: expo-sqlite works on all platforms without platform-specific code
+- **Native (iOS/Android)**: Uses native SQLite for maximum performance
+- **Web**: Automatically uses sql.js (SQLite WASM) via configured Metro bundler
 - **Offline-First**: All data stored locally in SQLite
 - **Auto-Migrations**: Migrations run automatically on app startup
-- **Cloud Sync Ready**: Easy to add Turso cloud sync later
+
+## Web Support
+
+expo-sqlite v16+ supports web through sql.js (WebAssembly). The `metro.config.js` is already configured with:
+- WASM asset support
+- CORS headers for SharedArrayBuffer (required for web)
+
+No additional configuration needed - it just works!
 
 ## Files
 
-- `client.ts` - libSQL client configuration and migration runner
+- `client.ts` - expo-sqlite client configuration and migration runner
 - `provider.tsx` - React Context provider for database access
 - `hooks.ts` - React hooks for database operations
 - `schema.ts` - Drizzle ORM schema definitions
 - `migrations/` - SQL migration files
+- `migrations/migrations.js` - Migration bundle for expo-sqlite
 
 ## Usage
 
@@ -58,42 +68,25 @@ bun db:generate
 # Migrations apply automatically on app restart
 ```
 
-## Cloud Sync (Optional)
+## Platform Support
 
-To enable cloud sync with Turso:
+**Native (iOS/Android):**
+- Native SQLite (better-sqlite3)
+- Full offline support
+- File system persistence
 
-1. Create a Turso database:
-```bash
-turso db create my-app
-turso db show my-app
-```
+**Web:**
+- sql.js (SQLite WASM)
+- IndexedDB for persistence
+- Automatic via Metro config
+- Full offline support
 
-2. Update `db/client.ts`:
-```typescript
-export const client = createClient({
-  url: process.env.EXPO_PUBLIC_TURSO_URL || "file:local.db",
-  authToken: process.env.EXPO_PUBLIC_TURSO_AUTH_TOKEN,
-  syncUrl: process.env.EXPO_PUBLIC_TURSO_URL,
-  syncInterval: 60, // Sync every 60 seconds
-});
-```
+## Benefits of This Architecture
 
-3. Add environment variables to `.env`:
-```
-EXPO_PUBLIC_TURSO_URL=libsql://your-db.turso.io
-EXPO_PUBLIC_TURSO_AUTH_TOKEN=your-auth-token
-```
-
-## Benefits Over Old Architecture
-
-**Before (Dual-Mode):**
-- ❌ Two different databases (Expo SQLite + SQL.js)
-- ❌ Manual migration management for web
-- ❌ Platform-specific code
-- ❌ No real sync
-
-**Now (libSQL):**
-- ✅ Single database everywhere
+**Unified expo-sqlite:**
+- ✅ Single database client for all platforms
 - ✅ Auto-migrations on all platforms
-- ✅ Unified codebase
-- ✅ Cloud sync ready
+- ✅ No platform-specific code needed
+- ✅ Native performance on mobile
+- ✅ Works offline everywhere
+- ✅ Simple, clean architecture

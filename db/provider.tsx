@@ -1,10 +1,10 @@
-import type { LibSQLDatabase } from "drizzle-orm/libsql";
+import type { ExpoSQLiteDatabase } from "drizzle-orm/expo-sqlite";
 import React, { type PropsWithChildren, useContext, useEffect, useState } from "react";
 import { db, runMigrations } from "./client";
 import * as schema from "./schema";
 
 type ContextType = {
-  db: LibSQLDatabase<typeof schema> | null;
+  db: ExpoSQLiteDatabase<typeof schema> | null;
   isReady: boolean;
   error: Error | null;
 };
