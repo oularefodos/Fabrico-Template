@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDatabase } from "@/db/drizzle";
+import { useDatabase } from "@/db/provider";
 import { todoTable, type Todo } from "@/db/schema";
 
 const todoFormSchema = z.object({
@@ -53,7 +53,7 @@ export default function EditTodoScreen() {
 
   React.useEffect(() => {
     async function loadTodo() {
-      if (!id) return;
+      if (!id || !db) return;
       try {
         const result = await db
           .select()
@@ -81,7 +81,7 @@ export default function EditTodoScreen() {
   }, [id, db]);
 
   const onSubmit = async (data: TodoFormValues) => {
-    if (!id) return;
+    if (!id || !db) return;
 
     try {
       setIsSubmitting(true);

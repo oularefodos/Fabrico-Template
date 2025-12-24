@@ -6,7 +6,8 @@ import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useMigrationHelper, useDatabase } from "@/db/drizzle";
+import { useMigrationHelper } from "@/db/drizzle";
+import { useDatabase } from "@/db/provider";
 import { todoTable, type Todo } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -39,6 +40,7 @@ function TodoListScreen() {
   const [loading, setLoading] = React.useState(true);
 
   const loadTodos = React.useCallback(async () => {
+    if (!db) return;
     try {
       const result = await db
         .select()
@@ -57,6 +59,7 @@ function TodoListScreen() {
   }, [loadTodos]);
 
   const toggleTodo = async (id: string, completed: boolean) => {
+    if (!db) return;
     try {
       await db
         .update(todoTable)
@@ -69,6 +72,7 @@ function TodoListScreen() {
   };
 
   const deleteTodo = async (id: string) => {
+    if (!db) return;
     try {
       await db.delete(todoTable).where(eq(todoTable.id, id));
       await loadTodos();

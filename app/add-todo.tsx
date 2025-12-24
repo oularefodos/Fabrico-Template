@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDatabase } from "@/db/drizzle";
+import { useDatabase } from "@/db/provider";
 import { todoTable } from "@/db/schema";
 
 const todoFormSchema = z.object({
@@ -48,6 +48,7 @@ export default function AddTodoScreen() {
   });
 
   const onSubmit = async (data: TodoFormValues) => {
+    if (!db) return;
     try {
       setIsSubmitting(true);
       await db.insert(todoTable).values({
