@@ -78,9 +78,7 @@ const ListItem: React.FC<ListItemProps> = ({
 		return null;
 	};
 	const pressable = props?.onPress || href;
-	const Component = (pressable ? Pressable : View) as ElementType<
-		ViewProps | PressableProps | LinkProps
-	>;
+	const Component = (pressable ? Pressable : View) as any;
 
 	const body = (
 		<Component
