@@ -1,39 +1,28 @@
-import { Platform } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Simple in-memory storage for native platforms
-const memoryStorage = new Map<string, string>();
-
-export function getItem<T>(key: string): T | null {
+export async function getItem<T>(key: string): Promise<T | null> {
   try {
-    let value: string | null = null;
-
-    if (Platform.OS === "web") {
-      value = localStorage.getItem(key);
-    } else {
-      value = memoryStorage.get(key) || null;
-    }
-
+    const value = await AsyncStorage.getItem(key);
     return value ? JSON.parse(value) : null;
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error getting item from storage:", error);
     return null;
   }
 }
 
-export function setItem<T>(key: string, value: T) {
-  const stringValue = JSON.stringify(value);
-
-  if (Platform.OS === "web") {
-    localStorage.setItem(key, stringValue);
-  } else {
-    memoryStorage.set(key, stringValue);
+export async function setItem<T>(key: string, value: T): Promise<void> {
+  try {
+    const stringValue = JSON.stringify(value);
+    await AsyncStorage.setItem(key, stringValue);
+  } catch (error) {
+    console.error("Error setting item in storage:", error);
   }
 }
 
-export function removeItem(key: string) {
-  if (Platform.OS === "web") {
-    localStorage.removeItem(key);
-  } else {
-    memoryStorage.delete(key);
+export async function removeItem(key: string): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (error) {
+    console.error("Error removing item from storage:", error);
   }
 }

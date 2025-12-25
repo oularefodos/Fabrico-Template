@@ -44,7 +44,7 @@ Fabrico embraces **modern React Native development**:
 ### State & Storage
 - 🐻 **[Zustand](https://zustand-demo.pmnd.rs/)** - Minimal state management
 - 🎭 **React Context** - Theme providers
-- 💾 **localStorage** - Simple persistent storage (web + in-memory fallback for native)
+- 💾 **[AsyncStorage](https://react-native-async-storage.github.io/async-storage/)** - Persistent storage (iOS, Android, Web)
 
 ### Developer Experience
 - 📏 **[Biome](https://biomejs.dev/)** - Fast linting and formatting (ESLint + Prettier replacement)
@@ -117,7 +117,7 @@ fabrico-template/
 ├── lib/                     # Utilities
 │   ├── icons/               # Custom icon components
 │   ├── utils.ts             # cn() utility (clsx + tailwind-merge)
-│   ├── storage.ts           # Simple localStorage wrapper
+│   ├── storage.ts           # AsyncStorage wrapper
 │   └── useColorScheme.tsx   # Theme hook
 │
 ├── hooks/                   # React hooks
@@ -309,14 +309,14 @@ function ThemeSwitcher() {
 ```tsx
 import { getItem, setItem, removeItem } from '@/lib/storage';
 
-// Store
-setItem('user.name', 'John Doe');
+// Store (async)
+await setItem('user.name', 'John Doe');
 
-// Retrieve
-const name = getItem<string>('user.name');
+// Retrieve (async)
+const name = await getItem<string>('user.name');
 
-// Delete
-removeItem('user.name');
+// Delete (async)
+await removeItem('user.name');
 ```
 
 ---
