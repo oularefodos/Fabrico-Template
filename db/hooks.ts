@@ -1,8 +1,8 @@
 import { useDatabase } from "./provider";
 
 /**
- * Hook to check migration status
- * Much simpler with libSQL - migrations run automatically in the provider
+ * Hook to check database initialization status
+ * Works with adapter pattern - initialization happens in provider
  */
 export function useMigrationHelper() {
   const { isReady, error } = useDatabase();

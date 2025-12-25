@@ -23,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDatabase } from "@/db/provider";
-import { todoTable } from "@/db/schema";
 
 const todoFormSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title is too long"),
@@ -34,7 +33,7 @@ const todoFormSchema = z.object({
 type TodoFormValues = z.infer<typeof todoFormSchema>;
 
 export default function AddTodoScreen() {
-  const { db } = useDatabase();
+  const { adapter } = useDatabase();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -48,10 +47,10 @@ export default function AddTodoScreen() {
   });
 
   const onSubmit = async (data: TodoFormValues) => {
-    if (!db) return;
+    if (!adapter) return;
     try {
       setIsSubmitting(true);
-      await db.insert(todoTable).values({
+      await adapter.createTodo({
         title: data.title,
         description: data.description || null,
         priority: data.priority,

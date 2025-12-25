@@ -4,7 +4,6 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDatabase } from "@/db/provider";
-import { todoTable, type Todo } from "@/db/schema";
+import type { Todo } from "@/db/schema";
 
 const todoFormSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title is too long"),
@@ -35,7 +34,7 @@ const todoFormSchema = z.object({
 type TodoFormValues = z.infer<typeof todoFormSchema>;
 
 export default function EditTodoScreen() {
-  const { db } = useDatabase();
+  const { adapter } = useDatabase();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -53,16 +52,11 @@ export default function EditTodoScreen() {
 
   React.useEffect(() => {
     async function loadTodo() {
-      if (!id || !db) return;
+      if (!id || !adapter) return;
       try {
-        const result = await db
-          .select()
-          .from(todoTable)
-          .where(eq(todoTable.id, id as string))
-          .limit(1);
+        const loadedTodo = await adapter.getTodoById(id as string);
 
-        if (result.length > 0) {
-          const loadedTodo = result[0];
+        if (loadedTodo) {
           setTodo(loadedTodo);
           form.reset({
             title: loadedTodo.title,
@@ -78,21 +72,18 @@ export default function EditTodoScreen() {
     }
 
     loadTodo();
-  }, [id, db]);
+  }, [id, adapter]);
 
   const onSubmit = async (data: TodoFormValues) => {
-    if (!id || !db) return;
+    if (!id || !adapter) return;
 
     try {
       setIsSubmitting(true);
-      await db
-        .update(todoTable)
-        .set({
-          title: data.title,
-          description: data.description || null,
-          priority: data.priority,
-        })
-        .where(eq(todoTable.id, id as string));
+      await adapter.updateTodo(id as string, {
+        title: data.title,
+        description: data.description || null,
+        priority: data.priority,
+      });
       router.back();
     } catch (error) {
       console.error("Error updating todo:", error);

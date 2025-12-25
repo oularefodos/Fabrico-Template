@@ -1,51 +1,71 @@
-# Database Setup with expo-sqlite
+# Database Setup with Adapter Pattern
 
-This project uses **expo-sqlite** for a unified, offline-first database across all platforms (iOS, Android, Web).
+This project uses an **adapter pattern** for a mobile-first, offline database architecture.
 
 ## Architecture
 
-- **Single Database Client**: expo-sqlite works on all platforms without platform-specific code
-- **Native (iOS/Android)**: Uses native SQLite for maximum performance
-- **Web**: Automatically uses sql.js (SQLite WASM) via configured Metro bundler
-- **Offline-First**: All data stored locally in SQLite
-- **Auto-Migrations**: Migrations run automatically on app startup
+**Adapter Pattern:**
+- **Mobile (iOS/Android)**: expo-sqlite (native SQLite - best performance)
+- **Web**: localStorage (simple, no WASM complexity)
+- **Unified API**: Same interface for all platforms via adapters
 
-## Web Support
+**Benefits:**
+- ✅ Mobile-first approach (SQLite on native platforms)
+- ✅ Simple web implementation (localStorage, no WASM)
+- ✅ No CORS/SharedArrayBuffer complexity
+- ✅ Offline-first on all platforms
+- ✅ Platform-specific optimizations
 
-expo-sqlite v16+ supports web through sql.js (WebAssembly). The `metro.config.js` is already configured with:
-- WASM asset support
-- CORS headers for SharedArrayBuffer (required for web)
+## How It Works
 
-No additional configuration needed - it just works!
+The **DatabaseAdapter** interface provides a unified API:
+```typescript
+interface DatabaseAdapter {
+  initialize(): Promise<{ success: boolean; error?: Error }>;
+  getTodos(): Promise<Todo[]>;
+  getTodoById(id: string): Promise<Todo | null>;
+  createTodo(todo: InsertTodo): Promise<Todo>;
+  updateTodo(id: string, updates: Partial<InsertTodo>): Promise<Todo>;
+  deleteTodo(id: string): Promise<void>;
+  isReady(): boolean;
+}
+```
+
+The provider automatically selects the right adapter based on `Platform.OS`.
 
 ## Files
 
-- `client.ts` - expo-sqlite client configuration and migration runner
-- `provider.tsx` - React Context provider for database access
+- `adapter.ts` - DatabaseAdapter interface
+- `adapters/expo-sqlite.ts` - Mobile adapter (iOS/Android)
+- `adapters/local-storage.ts` - Web adapter
+- `provider.tsx` - React Context with platform detection
 - `hooks.ts` - React hooks for database operations
-- `schema.ts` - Drizzle ORM schema definitions
-- `migrations/` - SQL migration files
-- `migrations/migrations.js` - Migration bundle for expo-sqlite
+- `schema.ts` - Shared type definitions
+- `migrations/` - SQL migrations (mobile only)
 
 ## Usage
 
-### Access Database
+### Access Database Adapter
 
 ```typescript
 import { useDatabase } from "@/db/provider";
 
 function MyComponent() {
-  const { db, isReady, error } = useDatabase();
+  const { adapter, isReady, error } = useDatabase();
 
   if (!isReady) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
 
-  // Use db here
-  const todos = await db.select().from(todoTable);
+  // Use adapter methods
+  const todos = await adapter.getTodos();
+  const todo = await adapter.getTodoById(id);
+  await adapter.createTodo({ title: "New todo", completed: false });
+  await adapter.updateTodo(id, { completed: true });
+  await adapter.deleteTodo(id);
 }
 ```
 
-### Check Migration Status
+### Check Initialization Status
 
 ```typescript
 import { useMigrationHelper } from "@/db/hooks";
@@ -54,39 +74,43 @@ function MyComponent() {
   const { success, error } = useMigrationHelper();
 
   if (!success) return <Text>Loading...</Text>;
-  // Migrations complete, database ready
+  // Database ready
 }
 ```
 
-### Create Migrations
+### Add New Fields to Schema
 
 ```bash
 # 1. Update schema in db/schema.ts
-# 2. Generate migration
+# 2. Generate migration (mobile only)
 bun db:generate
 
-# Migrations apply automatically on app restart
+# 3. Update adapters if needed:
+#    - adapters/expo-sqlite.ts (auto-migrates)
+#    - adapters/local-storage.ts (update types)
 ```
 
-## Platform Support
+## Platform Details
 
-**Native (iOS/Android):**
-- Native SQLite (better-sqlite3)
-- Full offline support
-- File system persistence
+**Mobile (iOS/Android):**
+- Adapter: `ExpoSQLiteAdapter`
+- Storage: Native SQLite via expo-sqlite
+- Migrations: Automatic via Drizzle
+- Persistence: File system
+- Performance: Native SQLite speed
 
 **Web:**
-- sql.js (SQLite WASM)
-- IndexedDB for persistence
-- Automatic via Metro config
-- Full offline support
+- Adapter: `LocalStorageAdapter`
+- Storage: localStorage (JSON)
+- Migrations: Not needed (schema-less)
+- Persistence: Browser localStorage
+- Performance: Fast for todo app data
 
-## Benefits of This Architecture
+## Why This Architecture?
 
-**Unified expo-sqlite:**
-- ✅ Single database client for all platforms
-- ✅ Auto-migrations on all platforms
-- ✅ No platform-specific code needed
-- ✅ Native performance on mobile
-- ✅ Works offline everywhere
-- ✅ Simple, clean architecture
+**Mobile-First:**
+- Mobile apps get full SQLite power
+- Web gets simple, reliable localStorage
+- No forcing WASM on web
+- No CORS/SharedArrayBuffer complexity
+- Each platform uses the best tool for the job

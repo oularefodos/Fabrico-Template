@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useMigrationHelper } from "@/db/hooks";
 import { useDatabase } from "@/db/provider";
-import { todoTable, type Todo } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import type { Todo } from "@/db/schema";
 
 export default function Home() {
   const { success, error } = useMigrationHelper();
@@ -34,37 +33,31 @@ export default function Home() {
 }
 
 function TodoListScreen() {
-  const { db } = useDatabase();
+  const { adapter } = useDatabase();
   const router = useRouter();
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   const loadTodos = React.useCallback(async () => {
-    if (!db) return;
+    if (!adapter) return;
     try {
-      const result = await db
-        .select()
-        .from(todoTable)
-        .orderBy(desc(todoTable.createdAt));
+      const result = await adapter.getTodos();
       setTodos(result);
     } catch (error) {
       console.error("Error loading todos:", error);
     } finally {
       setLoading(false);
     }
-  }, [db]);
+  }, [adapter]);
 
   React.useEffect(() => {
     loadTodos();
   }, [loadTodos]);
 
   const toggleTodo = async (id: string, completed: boolean) => {
-    if (!db) return;
+    if (!adapter) return;
     try {
-      await db
-        .update(todoTable)
-        .set({ completed: !completed })
-        .where(eq(todoTable.id, id));
+      await adapter.updateTodo(id, { completed: !completed });
       await loadTodos();
     } catch (error) {
       console.error("Error toggling todo:", error);
@@ -72,9 +65,9 @@ function TodoListScreen() {
   };
 
   const deleteTodo = async (id: string) => {
-    if (!db) return;
+    if (!adapter) return;
     try {
-      await db.delete(todoTable).where(eq(todoTable.id, id));
+      await adapter.deleteTodo(id);
       await loadTodos();
     } catch (error) {
       console.error("Error deleting todo:", error);
