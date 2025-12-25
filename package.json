@@ -12,7 +12,6 @@
     "ios": "expo run:ios",
     "build:web": "expo export --platform web",
     "format": "biome check --no-errors-on-unmatched --apply .",
-    "db:generate": "bun drizzle-kit generate",
     "expo-check": "bun expo install --check"
   },
   "dependencies": {
@@ -38,8 +37,6 @@
     "babel-plugin-inline-import": "^3.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "drizzle-orm": "^0.43.1",
-    "drizzle-zod": "^0.5.1",
     "expo": "~54.0.30",
     "expo-constants": "~18.0.12",
     "expo-dev-client": "~6.0.20",
@@ -50,7 +47,6 @@
     "expo-notifications": "~0.32.15",
     "expo-router": "~6.0.21",
     "expo-splash-screen": "~31.0.13",
-    "expo-sqlite": "~16.0.10",
     "expo-status-bar": "~3.0.9",
     "expo-system-ui": "~6.0.9",
     "expo-web-browser": "~15.0.10",
@@ -63,7 +59,6 @@
     "react-hook-form": "^7.54.2",
     "react-native": "0.81.5",
     "react-native-gesture-handler": "~2.28.0",
-    "react-native-mmkv": "^3.3.3",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
@@ -79,7 +74,6 @@
     "@babel/core": "^7.26.0",
     "@babel/runtime": "^7.26.0",
     "@types/react": "~19.1.10",
-    "drizzle-kit": "^0.31.1",
     "tailwindcss": "3.4.1",
     "typescript": "~5.9.3"
   },

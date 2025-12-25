@@ -6,7 +6,6 @@ import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalHost } from "@/components/primitives/portal";
-import { DatabaseProvider } from "@/db/provider";
 import { setAndroidNavigationBar } from "@/lib/android-navigation-bar";
 import { DARK_THEME, LIGHT_THEME } from "@/lib/constants";
 import { useColorScheme } from "@/lib/useColorScheme";
@@ -60,32 +59,16 @@ export default function RootLayout() {
 
 
   return (
-    <DatabaseProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ title: "Todos", headerShown: false }} />
-              <Stack.Screen
-                name="add-todo"
-                options={{
-                  headerShadowVisible: false,
-                  presentation: "modal",
-                }}
-              />
-              <Stack.Screen
-                name="edit-todo/[id]"
-                options={{
-                  headerShadowVisible: false,
-                  presentation: "modal",
-                }}
-              />
-            </Stack>
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </ThemeProvider>
-      <PortalHost />
-    </DatabaseProvider>
+    <ThemeProvider value={colorScheme === "dark" ? DARK_THEME : LIGHT_THEME}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ title: "Fabrico", headerShown: false }} />
+          </Stack>
+          <PortalHost />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 }

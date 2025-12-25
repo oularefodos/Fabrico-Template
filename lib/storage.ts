@@ -1,22 +1,39 @@
-import { MMKV } from "react-native-mmkv";
+import { Platform } from "react-native";
 
-export const storage = new MMKV();
+// Simple in-memory storage for native platforms
+const memoryStorage = new Map<string, string>();
 
 export function getItem<T>(key: string): T | null {
-  const value = storage.getString(key);
   try {
-    return value ? JSON.parse(value) || null : null;
+    let value: string | null = null;
+
+    if (Platform.OS === "web") {
+      value = localStorage.getItem(key);
+    } else {
+      value = memoryStorage.get(key) || null;
+    }
+
+    return value ? JSON.parse(value) : null;
   } catch (error) {
-    // Handle the error here
     console.error("Error parsing JSON:", error);
     return null;
   }
 }
 
 export function setItem<T>(key: string, value: T) {
-  storage.set(key, JSON.stringify(value));
+  const stringValue = JSON.stringify(value);
+
+  if (Platform.OS === "web") {
+    localStorage.setItem(key, stringValue);
+  } else {
+    memoryStorage.set(key, stringValue);
+  }
 }
 
 export function removeItem(key: string) {
-  storage.delete(key);
+  if (Platform.OS === "web") {
+    localStorage.removeItem(key);
+  } else {
+    memoryStorage.delete(key);
+  }
 }
