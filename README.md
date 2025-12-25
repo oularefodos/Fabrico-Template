@@ -1,24 +1,24 @@
 # ✨ Fabrico Template
 
-> A production-ready React Native starter with dual-mode database architecture
+> A production-ready React Native starter template for building beautiful cross-platform apps
 
-**Start with local SQLite, seamlessly upgrade to Supabase when you're ready.**
+**Build iOS, Android, and Web apps with a modern, type-safe stack.**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 [![Expo](https://img.shields.io/badge/Expo-54-black)](https://expo.dev)
-[![React Native](https://img.shields.io/badge/React%20Native-0.81.4-61dafb)](https://reactnative.dev)
+[![React Native](https://img.shields.io/badge/React%20Native-0.81.5-61dafb)](https://reactnative.dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green)](LICENSE)
 
 ---
 
 ## 🎯 Philosophy
 
-Fabrico embraces **progressive enhancement** for databases:
-- 🚀 **Zero friction start** - Works immediately with local SQLite, no configuration needed
-- ☁️ **Cloud when you're ready** - Upgrade to Supabase with your credentials
+Fabrico embraces **modern React Native development**:
+- 🚀 **Zero configuration** - Works immediately out of the box
 - 📱 **Cross-platform native** - iOS, Android, and Web from one codebase
 - 🎨 **Beautiful by default** - 50+ production-ready UI components
 - 🔒 **Type-safe everything** - End-to-end TypeScript with strict mode
+- ⚡ **Fast development** - Hot reload, file-based routing, Tailwind CSS
 
 ---
 
@@ -26,15 +26,9 @@ Fabrico embraces **progressive enhancement** for databases:
 
 ### Core Stack
 - ⚡ **[Expo v54](https://expo.dev)** - Latest Expo SDK with New Architecture
-- ⚛️ **[React 19.1.0](https://react.dev)** - Latest React with React Native 0.81.4
+- ⚛️ **[React 19.1.0](https://react.dev)** - Latest React with React Native 0.81.5
 - 🔷 **[TypeScript 5.9](https://www.typescriptlang.org/)** - Strict mode enabled, all errors resolved
 - 🗺️ **[Expo Router v6](https://docs.expo.dev/router)** - File-based routing with typed routes
-
-### Database Layer (Dual-Mode Ready)
-- 💾 **[Expo SQLite](https://docs.expo.dev/versions/latest/sdk/sqlite/)** - Native database (iOS/Android)
-- 🌐 **[SQL.js](https://github.com/sql-js/sql.js)** - SQLite WASM for Web
-- 🔧 **[Drizzle ORM v0.43](https://drizzle.dev)** - Type-safe queries with auto-migrations
-- ☁️ **Supabase Ready** - Infrastructure prepared for cloud sync
 
 ### UI & Styling
 - 💎 **[NativeWind v4](https://www.nativewind.dev)** - Tailwind CSS for React Native
@@ -48,9 +42,9 @@ Fabrico embraces **progressive enhancement** for databases:
 - 🎯 **Form Components** - Pre-built FormInput, FormSelect, FormCheckbox, etc.
 
 ### State & Storage
-- 💨 **[MMKV](https://github.com/mrousavy/react-native-mmkv)** - Ultra-fast persistent storage
 - 🐻 **[Zustand](https://zustand-demo.pmnd.rs/)** - Minimal state management
-- 🎭 **React Context** - Database and theme providers
+- 🎭 **React Context** - Theme providers
+- 💾 **[AsyncStorage](https://react-native-async-storage.github.io/async-storage/)** - Persistent storage (iOS, Android, Web)
 
 ### Developer Experience
 - 📏 **[Biome](https://biomejs.dev/)** - Fast linting and formatting (ESLint + Prettier replacement)
@@ -107,7 +101,7 @@ bun dev
 ```
 fabrico-template/
 ├── app/                      # Expo Router screens
-│   ├── (tabs)/              # Tab navigation (hidden by default)
+│   ├── (tabs)/              # Tab navigation
 │   │   ├── index.tsx        # Landing page
 │   │   └── _layout.tsx      # Tab configuration
 │   ├── _layout.tsx          # Root layout with providers
@@ -120,132 +114,16 @@ fabrico-template/
 │   ├── Icons.tsx            # Lucide icons configuration
 │   └── ThemeToggle.tsx      # Theme switcher component
 │
-├── db/                      # Database layer
-│   ├── schema.ts            # Database schema (Users, Config)
-│   ├── drizzle.ts           # Native SQLite setup
-│   ├── drizzle.web.ts       # Web SQL.js setup
-│   ├── provider.tsx         # Database React Context
-│   └── migrations/          # Auto-generated SQL migrations
-│
 ├── lib/                     # Utilities
 │   ├── icons/               # Custom icon components
 │   ├── utils.ts             # cn() utility (clsx + tailwind-merge)
-│   ├── storage.ts           # MMKV wrapper
+│   ├── storage.ts           # AsyncStorage wrapper
 │   └── useColorScheme.tsx   # Theme hook
 │
 ├── hooks/                   # React hooks
 ├── assets/                  # Images, fonts, etc.
 └── public/                  # Web static assets
 ```
-
----
-
-## 💾 Database Architecture
-
-### Dual-Mode System
-
-Fabrico supports two database modes with a seamless upgrade path:
-
-#### **Local Mode** (Default)
-```typescript
-✅ SQLite database on device
-✅ Works 100% offline
-✅ Zero configuration required
-✅ Privacy-first (data never leaves device)
-✅ Fast queries (no network latency)
-```
-
-#### **Supabase Mode** (Coming Soon)
-```typescript
-☁️ Cloud backup and sync
-☁️ Multi-device support
-☁️ Real-time updates
-☁️ Built-in authentication
-☁️ Row-Level Security
-```
-
-### Database Schema
-
-The template includes a minimal schema ready for your customization:
-
-#### **Users Table**
-```typescript
-{
-  id: string              // CUID2 unique identifier
-  email: string           // Unique email
-  name: string
-  avatarUrl: string
-  createdAt: timestamp
-  updatedAt: timestamp
-  // Sync metadata (for future Supabase integration)
-  syncStatus: "local" | "synced" | "pending" | "error"
-  lastSyncedAt: timestamp
-}
-```
-
-#### **Config Table**
-```typescript
-{
-  key: string             // Configuration key
-  value: string           // Configuration value
-  updatedAt: timestamp
-}
-```
-
-**Stores:**
-- Database mode (`local` or `supabase`)
-- Supabase credentials (when connected)
-- App preferences
-
-### Working with the Database
-
-```typescript
-import { useDatabase } from '@/db/provider';
-import { userTable } from '@/db/schema';
-import { eq } from 'drizzle-orm';
-
-function MyComponent() {
-  const { db } = useDatabase();
-
-  // Query
-  const users = await db.select().from(userTable);
-
-  // Insert
-  await db.insert(userTable).values({
-    email: 'user@example.com',
-    name: 'John Doe'
-  });
-
-  // Update
-  await db.update(userTable)
-    .set({ name: 'Jane Doe' })
-    .where(eq(userTable.email, 'user@example.com'));
-
-  // Delete
-  await db.delete(userTable)
-    .where(eq(userTable.email, 'user@example.com'));
-}
-```
-
-### Adding New Tables
-
-1. **Define schema** in `db/schema.ts`:
-```typescript
-export const postsTable = sqliteTable("posts", {
-  id: text("id").$defaultFn(() => createId()).primaryKey(),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  userId: text("user_id").references(() => userTable.id),
-  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
-});
-```
-
-2. **Generate migration**:
-```bash
-bun db:generate
-```
-
-3. **Migrations auto-run** on app start via `useMigrationHelper()`
 
 ---
 
@@ -429,21 +307,16 @@ function ThemeSwitcher() {
 ### Persistent Storage
 
 ```tsx
-import { storage } from '@/lib/storage';
+import { getItem, setItem, removeItem } from '@/lib/storage';
 
-// Store
-storage.set('user.name', 'John Doe');
+// Store (async)
+await setItem('user.name', 'John Doe');
 
-// Retrieve
-const name = storage.getString('user.name');
+// Retrieve (async)
+const name = await getItem<string>('user.name');
 
-// Delete
-storage.delete('user.name');
-
-// Check existence
-if (storage.contains('user.name')) {
-  // ...
-}
+// Delete (async)
+await removeItem('user.name');
 ```
 
 ---
@@ -460,9 +333,6 @@ bun android          # Build & run Android
 # Build
 bun build:web        # Build static web export
 
-# Database
-bun db:generate      # Generate migrations from schema
-
 # Code Quality
 bun format           # Format code with Biome
 bun expo-check       # Check Expo dependency versions
@@ -473,23 +343,15 @@ bun expo-check       # Check Expo dependency versions
 ## 🔮 Roadmap
 
 ### Planned Features
-- [ ] **Supabase Integration**
-  - OAuth authentication (Google, GitHub, Email)
-  - Cloud sync with conflict resolution
-  - Real-time subscriptions
-  - Row-Level Security setup
-
 - [ ] **Enhanced UI**
-  - Settings screen with database mode switcher
-  - Supabase connection UI
-  - Sync status indicators
-  - Offline queue management UI
+  - Additional component examples
+  - More form patterns
+  - Animation examples
 
 - [ ] **Additional Features**
-  - File upload with Supabase Storage
-  - Push notifications
   - i18n support (multi-language)
   - Example CRUD screens
+  - State management examples
 
 - [ ] **Developer Tools**
   - Testing setup (Jest + React Native Testing Library)
@@ -519,14 +381,13 @@ Apache License 2.0 - See [LICENSE](LICENSE) for details.
 
 Built with:
 - [Expo](https://expo.dev) - Cross-platform framework
-- [Drizzle ORM](https://drizzle.dev) - Type-safe ORM
 - [NativeWind](https://www.nativewind.dev) - Tailwind for React Native
 - [Radix UI](https://www.radix-ui.com) - Accessible primitives
 - [Lucide](https://lucide.dev) - Beautiful icons
 - [React Hook Form](https://react-hook-form.com/) - Forms
 - [Zod](https://zod.dev) - Validation
 
-Inspired by the local-first movement and modern React Native best practices.
+Inspired by modern React Native best practices and the open-source community.
 
 ---
 

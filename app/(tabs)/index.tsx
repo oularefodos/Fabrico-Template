@@ -1,34 +1,11 @@
 import { View, ScrollView } from "react-native";
 import { Stack } from "expo-router";
 import * as React from "react";
-import { Sparkles, Database, Cloud, Terminal } from "@/components/Icons";
+import { Sparkles, Terminal, Code, Activity } from "@/components/Icons";
 import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
-import { useMigrationHelper } from "@/db/drizzle";
 
 export default function Home() {
-  const { success, error } = useMigrationHelper();
-
-  if (error) {
-    return (
-      <View className="flex-1 items-center justify-center gap-5 p-6 bg-background">
-        <Text className="text-destructive">Migration error: {error.message}</Text>
-      </View>
-    );
-  }
-
-  if (!success) {
-    return (
-      <View className="flex-1 items-center justify-center gap-5 p-6 bg-background">
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  return <ScreenContent />;
-}
-
-function ScreenContent() {
   return (
     <ScrollView className="flex-1 bg-background">
       <Stack.Screen options={{ title: "Fabrico" }} />
@@ -44,8 +21,7 @@ function ScreenContent() {
           </View>
 
           <Text className="text-xl text-muted-foreground leading-7">
-            Production-ready React Native starter. Local-first database with
-            cloud sync. Ship faster.
+            Production-ready React Native starter template. Build beautiful cross-platform apps faster.
           </Text>
 
           <View className="flex-row gap-2 flex-wrap">
@@ -54,12 +30,12 @@ function ScreenContent() {
               <Text className="text-sm">Expo 54</Text>
             </Badge>
             <Badge variant="secondary" className="flex-row gap-1.5 px-3 py-1.5">
-              <Database size={14} className="text-foreground" />
-              <Text className="text-sm">Drizzle ORM</Text>
+              <Code size={14} className="text-foreground" />
+              <Text className="text-sm">React Native</Text>
             </Badge>
             <Badge variant="secondary" className="flex-row gap-1.5 px-3 py-1.5">
-              <Cloud size={14} className="text-foreground" />
-              <Text className="text-sm">Supabase</Text>
+              <Activity size={14} className="text-foreground" />
+              <Text className="text-sm">NativeWind</Text>
             </Badge>
           </View>
         </View>

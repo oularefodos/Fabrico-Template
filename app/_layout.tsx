@@ -6,7 +6,6 @@ import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalHost } from "@/components/primitives/portal";
-import { DatabaseProvider } from "@/db/provider";
 import { setAndroidNavigationBar } from "@/lib/android-navigation-bar";
 import { DARK_THEME, LIGHT_THEME } from "@/lib/constants";
 import { useColorScheme } from "@/lib/useColorScheme";
@@ -39,17 +38,20 @@ export default function RootLayout() {
   useFrameworkReady();
 
   useEffect(() => {
-    const theme = getItem("theme");
-    if (!theme) {
-      setAndroidNavigationBar(colorScheme);
-      setItem("theme", colorScheme);
-      return;
+    async function loadTheme() {
+      const theme = await getItem<string>("theme");
+      if (!theme) {
+        setAndroidNavigationBar(colorScheme);
+        await setItem("theme", colorScheme);
+        return;
+      }
+      const colorTheme = theme === "dark" ? "dark" : "light";
+      setAndroidNavigationBar(colorTheme);
+      if (colorTheme !== colorScheme) {
+        setColorScheme(colorTheme);
+      }
     }
-    const colorTheme = theme === "dark" ? "dark" : "light";
-    setAndroidNavigationBar(colorTheme);
-    if (colorTheme !== colorScheme) {
-      setColorScheme(colorTheme);
-    }
+    loadTheme();
   }, []);
 
   useEffect(() => {
@@ -60,24 +62,16 @@ export default function RootLayout() {
 
 
   return (
-    <DatabaseProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ title: "Habits", headerShown: false }} />
-              <Stack.Screen options={{
-                headerShadowVisible: false,
-              }} name="habits/archive" />
-              <Stack.Screen options={{
-                headerShadowVisible: false,
-              }} name="habits/[id]" />
-            </Stack>
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </ThemeProvider>
-      <PortalHost />
-    </DatabaseProvider>
+    <ThemeProvider value={colorScheme === "dark" ? DARK_THEME : LIGHT_THEME}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ title: "Fabrico", headerShown: false }} />
+          </Stack>
+          <PortalHost />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 }

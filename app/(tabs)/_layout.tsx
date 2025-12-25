@@ -1,4 +1,4 @@
-import { Sparkles } from '@/components/Icons';
+import { CheckSquare } from '@/components/Icons';
 import { Tabs } from 'expo-router';
 
 export const unstable_settings = {
@@ -11,9 +11,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Fabrico',
+          title: 'Todos',
           headerShown: false,
-          tabBarIcon: () => <Sparkles className="text-foreground" />,
+          tabBarIcon: () => <CheckSquare className="text-foreground" />,
         }}
       />
     </Tabs>
