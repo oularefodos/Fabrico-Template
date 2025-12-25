@@ -39,66 +39,7 @@ export default function Home() {
             </Badge>
           </View>
         </View>
-
-        {/* Features */}
-        <View className="gap-4">
-          <Text className="text-2xl font-bold">Features</Text>
-
-          <View className="gap-3">
-            <FeatureItem
-              title="🎨 Beautiful UI Components"
-              description="Pre-built components with NativeWind (Tailwind CSS) styling"
-            />
-            <FeatureItem
-              title="🌙 Dark Mode Support"
-              description="Built-in dark mode with system preferences detection"
-            />
-            <FeatureItem
-              title="📱 Cross-Platform"
-              description="Works on iOS, Android, and Web out of the box"
-            />
-            <FeatureItem
-              title="⚡️ Type-Safe"
-              description="Full TypeScript support with strict type checking"
-            />
-            <FeatureItem
-              title="🚀 Modern Stack"
-              description="Expo Router, React 19, and latest React Native"
-            />
-          </View>
-        </View>
-
-        {/* Getting Started */}
-        <View className="gap-4 pb-8">
-          <Text className="text-2xl font-bold">Getting Started</Text>
-
-          <View className="gap-3">
-            <Text className="text-muted-foreground leading-6">
-              Edit <Text className="font-mono bg-muted px-2 py-1 rounded">app/(tabs)/index.tsx</Text> to customize this screen.
-            </Text>
-            <Text className="text-muted-foreground leading-6">
-              Add new screens in the <Text className="font-mono bg-muted px-2 py-1 rounded">app/</Text> directory using Expo Router's file-based routing.
-            </Text>
-            <Text className="text-muted-foreground leading-6">
-              Check out the <Text className="font-mono bg-muted px-2 py-1 rounded">components/</Text> directory for reusable UI components.
-            </Text>
-          </View>
-        </View>
       </View>
     </ScrollView>
-  );
-}
-
-interface FeatureItemProps {
-  title: string;
-  description: string;
-}
-
-function FeatureItem({ title, description }: FeatureItemProps) {
-  return (
-    <View className="bg-card p-4 rounded-lg border border-border">
-      <Text className="font-semibold mb-1">{title}</Text>
-      <Text className="text-sm text-muted-foreground">{description}</Text>
-    </View>
   );
 }
