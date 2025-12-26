@@ -97,11 +97,11 @@ To scale the app without "spaghetti code", use a **Feature-First** modular organ
 - putting massive logic inside `app/screen.tsx`
 
 ### ✅ The Modular Way (Recommended)
-Create a `features/` directory for distinct domains (e.g., `Auth`, `Profile`, `Feed`).
+Create a `modules/` directory for distinct domains (e.g., `Auth`, `Profile`, `Feed`).
 
 **Structure Pattern:**
 ```text
-features/authentication/
+modules/authentication/
 ├── components/          # Feature-specific UI (LoginForm.tsx, SocialButton.tsx)
 ├── hooks/               # Business logic (useLogin.ts, useSession.ts)
 ├── services/            # API calls (authService.ts)
