@@ -33,7 +33,7 @@ Fabrico embraces **modern React Native development**:
 ### UI & Styling
 - 💎 **[NativeWind v4](https://www.nativewind.dev)** - Tailwind CSS for React Native
 - 🎨 **50+ UI Components** - Cross-platform primitives + styled components
-- 🌗 **Dark/Light Mode** - System-aware with persistent preferences
+- ☀️ **Light Mode Only** - Simplified theme system (Dark mode removed for consistency)
 - ♿ **Accessible** - WCAG compliant with ARIA support
 
 ### Forms & Validation
@@ -224,9 +224,6 @@ All colors are defined in `app/global.css` using CSS variables:
 --muted: 240 4.8% 95.9%
 --accent: 240 4.8% 95.9%
 
-/* Dark mode automatically switches */
-```
-
 **Usage:**
 ```tsx
 <View className="bg-background text-foreground">
@@ -288,21 +285,7 @@ function MyForm() {
 }
 ```
 
-### Theme Switching
 
-```tsx
-import { useColorScheme } from '@/lib/useColorScheme';
-
-function ThemeSwitcher() {
-  const { colorScheme, setColorScheme } = useColorScheme();
-
-  return (
-    <Button onPress={() => setColorScheme('dark')}>
-      Switch to Dark Mode
-    </Button>
-  );
-}
-```
 
 ### Persistent Storage
 
@@ -336,6 +319,9 @@ bun build:web        # Build static web export
 # Code Quality
 bun format           # Format code with Biome
 bun expo-check       # Check Expo dependency versions
+
+# Testing
+bun test             # Run unit tests (Jest)
 ```
 
 ---
@@ -353,9 +339,10 @@ bun expo-check       # Check Expo dependency versions
   - Example CRUD screens
   - State management examples
 
-- [ ] **Developer Tools**
-  - Testing setup (Jest + React Native Testing Library)
-  - E2E testing (Detox)
+- [x] **Developer Tools**
+  - [x] Testing setup (Jest + React Native Testing Library)
+  - [x] CI/CD (GitHub Actions)
+  - [ ] E2E testing (Detox)
   - Storybook for components
   - Component documentation
 

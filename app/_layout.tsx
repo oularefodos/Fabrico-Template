@@ -1,15 +1,13 @@
 import "./global.css";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { type Theme, ThemeProvider } from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalHost } from "@/components/primitives/portal";
 import { setAndroidNavigationBar } from "@/lib/android-navigation-bar";
-import { DARK_THEME, LIGHT_THEME } from "@/lib/constants";
-import { useColorScheme } from "@/lib/useColorScheme";
-import { getItem, setItem } from "@/lib/storage";
+import { LIGHT_THEME } from "@/lib/constants";
 import { useFrameworkReady } from "@/hooks/useFrameworkReady";
 import { Inter_400Regular, Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter';
 import { useEffect } from "react";
@@ -28,8 +26,6 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { colorScheme, setColorScheme } = useColorScheme();
-
   const [loaded, error] = useFonts({
     Inter_400Regular,
     Inter_600SemiBold,
@@ -38,20 +34,8 @@ export default function RootLayout() {
   useFrameworkReady();
 
   useEffect(() => {
-    async function loadTheme() {
-      const theme = await getItem<string>("theme");
-      if (!theme) {
-        setAndroidNavigationBar(colorScheme);
-        await setItem("theme", colorScheme);
-        return;
-      }
-      const colorTheme = theme === "dark" ? "dark" : "light";
-      setAndroidNavigationBar(colorTheme);
-      if (colorTheme !== colorScheme) {
-        setColorScheme(colorTheme);
-      }
-    }
-    loadTheme();
+    // Set Android navigation bar to light mode
+    setAndroidNavigationBar();
   }, []);
 
   useEffect(() => {
@@ -60,10 +44,9 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+    <ThemeProvider value={LIGHT_THEME}>
+      <StatusBar style="dark" />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <BottomSheetModalProvider>
           <Stack>

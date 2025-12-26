@@ -11,14 +11,6 @@ export const NAV_THEME = {
     primary: "hsl(240 5.9% 10%)", // primary
     text: "hsl(240 10% 3.9%)", // foreground
   },
-  dark: {
-    background: "hsl(240 10% 3.9%)", // background
-    border: "hsl(240 3.7% 15.9%)", // border
-    card: "hsl(240 10% 3.9%)", // card
-    notification: "hsl(0 72% 51%)", // destructive
-    primary: "hsl(0 0% 98%)", // primary
-    text: "hsl(0 0% 98%)", // foreground
-  },
 };
 
 export const LIGHT_THEME: Theme = {
@@ -42,26 +34,4 @@ export const LIGHT_THEME: Theme = {
     },
   },
   colors: NAV_THEME.light,
-};
-export const DARK_THEME: Theme = {
-  dark: true,
-  fonts: {
-    regular: {
-      fontFamily: NAV_FONT_FAMILY,
-      fontWeight: "400",
-    },
-    medium: {
-      fontFamily: NAV_FONT_FAMILY,
-      fontWeight: "500",
-    },
-    bold: {
-      fontFamily: NAV_FONT_FAMILY,
-      fontWeight: "700",
-    },
-    heavy: {
-      fontFamily: NAV_FONT_FAMILY,
-      fontWeight: "800",
-    },
-  },
-  colors: NAV_THEME.dark,
 };
